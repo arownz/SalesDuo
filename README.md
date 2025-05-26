@@ -142,3 +142,13 @@ php artisan serve
 - Ready for production deployment
 
 The application now presents a professional appearance suitable for business use, with modern design patterns, responsive layouts, and an intuitive user experience.
+
+![1748263167375](image/README/1748263167375.png)
+
+![1748263180762](image/README/1748263180762.png)
+
+![1748263196582](image/README/1748263196582.png)
+
+![1748263209184](image/README/1748263209184.png)
+
+![1748263227117](image/README/1748263227117.png)

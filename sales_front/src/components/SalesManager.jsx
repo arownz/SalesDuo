@@ -87,30 +87,37 @@ function SalesManager() {
   }
 
   return (
-    <Box>
+    <Box sx={{ width: '100%' }}>
       {/* Header */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4" sx={{ fontWeight: 600, color: 'text.primary' }}>
+        <Typography variant="h4" sx={{ 
+          fontWeight: 600, 
+          color: 'text.primary',
+          fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }
+        }}>
           Sales Entry
         </Typography>
       </Box>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 2, sm: 3 }}>
         {/* Sales Form */}
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} lg={8}>
           <Card>
-            <CardContent>
+            <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
               <Box display="flex" alignItems="center" gap={2} mb={3}>
-                <Avatar sx={{ bgcolor: 'primary.main' }}>
+                <Avatar sx={{ bgcolor: 'primary.main', width: { xs: 40, sm: 48 }, height: { xs: 40, sm: 48 } }}>
                   <SalesIcon />
                 </Avatar>
-                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                <Typography variant="h6" sx={{ 
+                  fontWeight: 600,
+                  fontSize: { xs: '1rem', sm: '1.25rem' }
+                }}>
                   New Sale Entry
                 </Typography>
               </Box>
               
               <Box component="form" onSubmit={handleSubmit}>
-                <Grid container spacing={3}>
+                <Grid container spacing={{ xs: 2, sm: 3 }}>
                   <Grid item xs={12} md={6}>
                     <FormControl fullWidth required>
                       <InputLabel>Select Menu Item</InputLabel>
@@ -119,6 +126,13 @@ function SalesManager() {
                         value={formData.menu_id}
                         onChange={handleChange}
                         label="Select Menu Item"
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: 200,
+                            },
+                          },
+                        }}
                       >
                         {menus.map((menu) => (
                           <MenuItem key={menu.menu_id} value={menu.menu_id}>
@@ -163,30 +177,48 @@ function SalesManager() {
 
                   {selectedMenu && formData.quantity && (
                     <Grid item xs={12}>
-                      <Paper sx={{ p: 3, bgcolor: 'grey.50', border: '2px dashed', borderColor: 'primary.main' }}>
-                        <Typography variant="h6" gutterBottom sx={{ color: 'primary.main', fontWeight: 600 }}>
+                      <Paper sx={{ 
+                        p: { xs: 2, sm: 3 }, 
+                        bgcolor: 'grey.50', 
+                        border: '2px dashed', 
+                        borderColor: 'primary.main' 
+                      }}>
+                        <Typography variant="h6" gutterBottom sx={{ 
+                          color: 'primary.main', 
+                          fontWeight: 600,
+                          fontSize: { xs: '1rem', sm: '1.25rem' }
+                        }}>
                           Order Preview
                         </Typography>
                         <Divider sx={{ mb: 2 }} />
                         <Grid container spacing={2}>
-                          <Grid item xs={6}>
+                          <Grid item xs={6} sm={6}>
                             <Typography variant="body2" color="text.secondary">Item:</Typography>
-                            <Typography variant="body1" fontWeight={500}>{selectedMenu.menu_name}</Typography>
+                            <Typography variant="body1" fontWeight={500} sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}>
+                              {selectedMenu.menu_name}
+                            </Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={6} sm={6}>
                             <Typography variant="body2" color="text.secondary">Unit Price:</Typography>
-                            <Typography variant="body1" fontWeight={500}>{formatCurrency(selectedMenu.menu_price)}</Typography>
+                            <Typography variant="body1" fontWeight={500} sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}>
+                              {formatCurrency(selectedMenu.menu_price)}
+                            </Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={6} sm={6}>
                             <Typography variant="body2" color="text.secondary">Quantity:</Typography>
-                            <Typography variant="body1" fontWeight={500}>{formData.quantity}</Typography>
+                            <Typography variant="body1" fontWeight={500} sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}>
+                              {formData.quantity}
+                            </Typography>
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={6} sm={6}>
                             <Typography variant="body2" color="text.secondary">Total:</Typography>
                             <Chip 
                               label={formatCurrency(totalPrice)} 
                               color="success" 
-                              sx={{ fontWeight: 700, fontSize: '1rem' }}
+                              sx={{ 
+                                fontWeight: 700, 
+                                fontSize: { xs: '0.875rem', sm: '1rem' }
+                              }}
                             />
                           </Grid>
                         </Grid>
@@ -202,7 +234,10 @@ function SalesManager() {
                       disabled={isLoading || !formData.menu_id || !formData.quantity}
                       startIcon={isLoading ? <CircularProgress size={20} /> : <AddIcon />}
                       fullWidth
-                      sx={{ py: 1.5 }}
+                      sx={{ 
+                        py: { xs: 1.5, sm: 2 },
+                        fontSize: { xs: '0.875rem', sm: '1rem' }
+                      }}
                     >
                       {isLoading ? 'Recording Sale...' : 'Record Sale'}
                     </Button>
@@ -214,20 +249,30 @@ function SalesManager() {
         </Grid>
 
         {/* Statistics Sidebar */}
-        <Grid item xs={12} md={4}>
-          <Box display="flex" flexDirection="column" gap={3}>
+        <Grid item xs={12} lg={4}>
+          <Box display="flex" flexDirection="column" gap={{ xs: 2, sm: 3 }}>
             <Card sx={{ background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)', color: 'white' }}>
-              <CardContent>
+              <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
                   <Box>
-                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                    <Typography variant="h4" sx={{ 
+                      fontWeight: 700,
+                      fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }
+                    }}>
                       {menus.length}
                     </Typography>
-                    <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>
+                    <Typography variant="subtitle1" sx={{ 
+                      opacity: 0.9,
+                      fontSize: { xs: '0.875rem', sm: '1rem' }
+                    }}>
                       Available Items
                     </Typography>
                   </Box>
-                  <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.2)', width: 48, height: 48 }}>
+                  <Avatar sx={{ 
+                    bgcolor: 'rgba(255,255,255,0.2)', 
+                    width: { xs: 40, sm: 48 }, 
+                    height: { xs: 40, sm: 48 }
+                  }}>
                     <RestaurantIcon />
                   </Avatar>
                 </Box>
@@ -235,17 +280,27 @@ function SalesManager() {
             </Card>
 
             <Card sx={{ background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)', color: 'white' }}>
-              <CardContent>
+              <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
                   <Box>
-                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                    <Typography variant="h4" sx={{ 
+                      fontWeight: 700,
+                      fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }
+                    }}>
                       {selectedMenu && formData.quantity ? formatCurrency(totalPrice) : '$0.00'}
                     </Typography>
-                    <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>
+                    <Typography variant="subtitle1" sx={{ 
+                      opacity: 0.9,
+                      fontSize: { xs: '0.875rem', sm: '1rem' }
+                    }}>
                       Current Order
                     </Typography>
                   </Box>
-                  <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.2)', width: 48, height: 48 }}>
+                  <Avatar sx={{ 
+                    bgcolor: 'rgba(255,255,255,0.2)', 
+                    width: { xs: 40, sm: 48 }, 
+                    height: { xs: 40, sm: 48 }
+                  }}>
                     <MoneyIcon />
                   </Avatar>
                 </Box>
@@ -254,19 +309,22 @@ function SalesManager() {
 
             {selectedMenu && (
               <Card>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+                  <Typography variant="h6" gutterBottom sx={{ 
+                    fontWeight: 600,
+                    fontSize: { xs: '1rem', sm: '1.25rem' }
+                  }}>
                     Selected Item Details
                   </Typography>
                   <Box display="flex" alignItems="center" gap={2} mb={2}>
-                    <Avatar sx={{ bgcolor: 'primary.main' }}>
-                      <RestaurantIcon />
+                    <Avatar sx={{ bgcolor: 'primary.main', width: { xs: 32, sm: 40 }, height: { xs: 32, sm: 40 } }}>
+                      <RestaurantIcon fontSize={window.innerWidth < 600 ? "small" : "medium"} />
                     </Avatar>
                     <Box>
-                      <Typography variant="body1" fontWeight={500}>
+                      <Typography variant="body1" fontWeight={500} sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}>
                         {selectedMenu.menu_name}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                         {formatCurrency(selectedMenu.menu_price)} per item
                       </Typography>
                     </Box>
