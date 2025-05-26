@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { ThemeProvider } from '@mui/material/styles'
-import { CssBaseline, AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Box, Container, Breadcrumbs, Link, Divider } from '@mui/material'
+import { CssBaseline, AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Box, Container, Breadcrumbs, Link, Divider, IconButton, useMediaQuery, useTheme } from '@mui/material'
 import { 
   Restaurant as MenuIcon, 
   PointOfSale as SalesIcon, 
   Analytics as AnalyticsIcon, 
   Assessment as ChartIcon,
   Dashboard as DashboardIcon,
-  Store as StoreIcon
+  Store as StoreIcon,
+  Menu as MenuToggleIcon
 } from '@mui/icons-material'
 import { Toaster } from 'react-hot-toast'
-import { theme } from './theme'
+import { theme as customTheme } from './theme'
 import './App.css'
 import MenuManager from './components/MenuManager'
 import SalesManager from './components/SalesManager'
@@ -22,6 +23,13 @@ const drawerWidth = 280
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard')
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen)
+  }
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon />, component: <Dashboard /> },
@@ -34,19 +42,35 @@ function App() {
   const activeMenuItem = menuItems.find(item => item.id === activeTab)
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={customTheme}>
       <CssBaseline />
-      <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+      <Box sx={{ 
+        display: 'flex', 
+        minHeight: '100vh', 
+        bgcolor: 'background.default',
+        width: '100%',
+        overflow: 'hidden'
+      }}>
         {/* App Bar */}
         <AppBar 
           position="fixed" 
           sx={{ 
             zIndex: (theme) => theme.zIndex.drawer + 1,
-            background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
-            boxShadow: '0 4px 20px rgba(25, 118, 210, 0.3)'
+            backgroundColor: '#1976d2',
+            boxShadow: 'none',
+            borderRadius: 0,
+            background: '#1976d2'
           }}
         >
           <Toolbar>
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuToggleIcon />
+            </IconButton>
             <StoreIcon sx={{ mr: 2, fontSize: 32 }} />
             <Typography variant="h5" component="h1" sx={{ fontWeight: 600 }}>
               SalesDuo
@@ -63,6 +87,7 @@ function App() {
           sx={{
             width: drawerWidth,
             flexShrink: 0,
+            display: { xs: 'none', sm: 'block' },
             '& .MuiDrawer-paper': {
               width: drawerWidth,
               boxSizing: 'border-box',
@@ -114,26 +139,119 @@ function App() {
           </Box>
         </Drawer>
 
+        {/* Mobile Navigation */}
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+              background: 'linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%)',
+              borderRight: '1px solid #e0e0e0',
+            },
+          }}
+        >
+          <Toolbar />
+          <Box sx={{ overflow: 'auto', pt: 2 }}>
+            <List>
+              {menuItems.map((item) => (
+                <ListItem key={item.id} disablePadding sx={{ mb: 1, px: 2 }}>
+                  <ListItemButton
+                    selected={activeTab === item.id}
+                    onClick={() => {
+                      setActiveTab(item.id)
+                      setMobileOpen(false)
+                    }}
+                    sx={{
+                      borderRadius: 2,
+                      py: 1.5,
+                      '&.Mui-selected': {
+                        background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
+                        color: 'white',
+                        '&:hover': {
+                          background: 'linear-gradient(135deg, #1565c0 0%, #0d47a1 100%)',
+                        },
+                        '& .MuiListItemIcon-root': {
+                          color: 'white',
+                        },
+                      },
+                      '&:hover': {
+                        backgroundColor: '#f5f5f5',
+                      },
+                    }}
+                  >
+                    <ListItemIcon sx={{ minWidth: 40 }}>
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary={item.label}
+                      primaryTypographyProps={{
+                        fontSize: 14,
+                        fontWeight: activeTab === item.id ? 600 : 500,
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Drawer>
+
         {/* Main Content */}
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box 
+          component="main" 
+          sx={{ 
+            flexGrow: 1, 
+            p: 3, 
+            width: { xs: '100%', sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            maxWidth: 'none',
+            overflow: 'auto',
+            minHeight: '100vh'
+          }}
+        >
           <Toolbar />
           
           {/* Breadcrumbs */}
           <Box sx={{ mb: 3 }}>
             <Breadcrumbs aria-label="breadcrumb">
-              <Link underline="hover" color="inherit" href="/">
-                Home
+              <Link 
+                underline="hover" 
+                color="inherit" 
+                component="button"
+                onClick={() => setActiveTab('dashboard')}
+                sx={{ 
+                  cursor: 'pointer',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: 'inherit',
+                  fontFamily: 'inherit'
+                }}
+              >
+                Dashboard
               </Link>
-              <Typography color="text.primary" sx={{ fontWeight: 500 }}>
-                {activeMenuItem?.label}
-              </Typography>
+              {activeTab !== 'dashboard' && (
+                <Typography color="text.primary" sx={{ fontWeight: 500 }}>
+                  {activeMenuItem?.label}
+                </Typography>
+              )}
             </Breadcrumbs>
           </Box>
 
           {/* Page Content */}
-          <Container maxWidth={false} sx={{ px: 0 }}>
+          <Box sx={{ 
+            width: '100%', 
+            maxWidth: 'none',
+            overflow: 'visible'
+          }}>
             {activeMenuItem?.component}
-          </Container>
+          </Box>
         </Box>
 
         {/* Toast Notifications */}
