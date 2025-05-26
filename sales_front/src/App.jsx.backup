@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ThemeProvider } from '@mui/material/styles'
-import { CssBaseline, AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Box, Breadcrumbs, Link } from '@mui/material'
+import { CssBaseline, AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Box, Breadcrumbs, Link, Divider } from '@mui/material'
 import { 
   Restaurant as MenuIcon, 
   PointOfSale as SalesIcon, 
@@ -40,7 +40,8 @@ function App() {
         display: 'flex', 
         minHeight: '100vh', 
         bgcolor: 'background.default',
-        width: '100%'
+        width: '100%',
+        overflow: 'hidden'
       }}>
         {/* App Bar */}
         <AppBar 
@@ -48,8 +49,9 @@ function App() {
           sx={{ 
             zIndex: (theme) => theme.zIndex.drawer + 1,
             backgroundColor: '#1976d2',
-            boxShadow: 1,
-            borderRadius: 0
+            boxShadow: 'none',
+            borderRadius: 0,
+            background: '#1976d2'
           }}
         >
           <Toolbar>
@@ -118,15 +120,37 @@ function App() {
               ))}
             </List>
           </Box>
-        </Drawer>        {/* Main Content */}
+        </Drawer>
+                    }}
+                  >
+                    <ListItemIcon sx={{ minWidth: 40 }}>
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary={item.label}
+                      primaryTypographyProps={{
+                        fontSize: 14,
+                        fontWeight: activeTab === item.id ? 600 : 500,
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Drawer>
+
+        {/* Main Content */}
         <Box 
           component="main" 
           sx={{ 
             flexGrow: 1, 
-            p: 3,
-            width: '100%',
-            minHeight: '100vh',
-            overflow: 'auto'
+            p: 3, 
+            width: { xs: '100%', sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            maxWidth: 'none',
+            overflow: 'auto',
+            minHeight: '100vh'
           }}
         >
           <Toolbar />
@@ -137,6 +161,7 @@ function App() {
               <Link 
                 underline="hover" 
                 color="inherit" 
+                component="button"
                 onClick={() => setActiveTab('dashboard')}
                 sx={{ 
                   cursor: 'pointer',
