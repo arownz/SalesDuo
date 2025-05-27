@@ -2,7 +2,7 @@
 -- Database: sales_data
 
 -- Create menu_tb table
-CREATE TABLE menu_tb (
+CREATE TABLE IF NOT EXISTS menu_tb (
     menu_id INT PRIMARY KEY AUTO_INCREMENT,
     menu_name VARCHAR(255) NOT NULL,
     menu_price DECIMAL(10, 2) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE menu_tb (
 );
 
 -- Create sales_tb table
-CREATE TABLE sales_tb (
+CREATE TABLE IF NOT EXISTS sales_tb (
     sales_id INT PRIMARY KEY AUTO_INCREMENT,
     menu_id INT NOT NULL,
     quantity INT NOT NULL,
